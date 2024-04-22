@@ -59,10 +59,12 @@ class SignUpProvider with ChangeNotifier {
   addToDatabase(String? uid) async {
     if (uid == null) return;
     Map<String, dynamic> data = {
-      'username': usernameController.text.trim(),
+      'name': usernameController.text.trim(),
       'email': emailController.text.trim(),
       'password': passwordController.text.trim(),
       'age': ageController.text.trim(),
+      'userFeeling': 'Normal',
+      'feelingEmoji': '🙂',
     };
     await realtimeDatabase.createUser(
       data: data,

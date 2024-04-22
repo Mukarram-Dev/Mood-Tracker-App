@@ -70,7 +70,7 @@ class LoginView extends StatelessWidget {
         children: [
           CustomTextFieldWidget(
             controller: provider.emailController,
-            textInputType: TextInputType.text,
+            textInputType: TextInputType.emailAddress,
             hintTitle: 'Email',
             prefixIcon: Icons.person,
           ),

@@ -62,7 +62,7 @@ class _HomeViewState extends State<HomeView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const Text(
-            'Recommendation for your mood',
+            'Recommendation on your mood',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
@@ -196,14 +196,16 @@ class _HomeViewState extends State<HomeView> {
             ),
             Gaps.verticalGapOf(10),
             GestureDetector(
-                onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) =>
-                        _buildAddFeelingDialog(context, value),
-                  );
-                },
-                child: const Chip(label: Text('Add New Feeling')))
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => _buildAddFeelingDialog(context, value),
+                );
+              },
+              child: const Chip(
+                label: Text('Add New Feeling'),
+              ),
+            ),
           ],
         ),
       ),
