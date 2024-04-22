@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
-import 'package:mood_track/data/firebase_services/firebase_database.dart';
+import 'package:mood_track/data/db/hive.dart';
+import 'package:mood_track/model/mood_emoji.dart';
 import 'package:mood_track/model/user_model.dart';
-import 'package:mood_track/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 
 class HomeProvider with ChangeNotifier {
@@ -14,6 +14,14 @@ class HomeProvider with ChangeNotifier {
   String _selectedMood = 'Happy';
   String get selectedMood => _selectedMood;
 
+  List<MoodEmoji> _listEmoji = [];
+  List<MoodEmoji> get listEmoji => _listEmoji;
+
+  final feelingController = TextEditingController();
+  final feelingEmojiController = TextEditingController();
+
+  final hiveService = HiveService();
+
   void setSelectedMood(String newVal) {
     _selectedMood = newVal;
     notifyListeners();
@@ -21,10 +29,17 @@ class HomeProvider with ChangeNotifier {
 
   void formatDate(String date) {}
 
-  Future<void> setUserModel() async {
-    final model = await DataServices().getCurrentUserData();
-    _userModel = model;
-    AppConstants.betProId = _userModel?.betProId ?? '';
-    AppConstants.betProPass = _userModel?.betProPassword ?? '';
+  Future<void> setEmojiList() async {
+    _listEmoji = await hiveService.getEmojiList();
+  }
+
+  Future<void> addEmoji() async {
+    await hiveService.addEmoji(
+        'key_${feelingController.text.trim()}',
+        MoodEmoji(
+            moodEmoji: feelingEmojiController.text.trim(),
+            moodTitle: feelingController.text.trim()));
+
+    await setEmojiList();
   }
 }

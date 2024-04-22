@@ -1,7 +1,4 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
-import 'package:mood_track/configs/components/custom_button.dart';
 import 'package:mood_track/configs/components/custom_text_field.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/configs/theme/text_theme_style.dart';
@@ -33,7 +30,7 @@ class _HomeViewState extends State<HomeView> {
 
   void _fetchUserData() async {
     final provider = Provider.of<HomeProvider>(context, listen: false);
-    // await provider.setUserModel();
+    await provider.setEmojiList();
   }
 
   @override
@@ -104,7 +101,7 @@ class _HomeViewState extends State<HomeView> {
               minLeadingWidth: 0,
               contentPadding: const EdgeInsets.all(0),
               title: Text(
-                'Hi, ${value.userModel?.username},',
+                'Hi, ${value.userModel?.name},',
                 style: AppTextStyles.poppinsMedium(),
               ),
               subtitle: Text(
@@ -202,7 +199,8 @@ class _HomeViewState extends State<HomeView> {
                 onTap: () {
                   showDialog(
                     context: context,
-                    builder: (context) => _buildAddFeelingDialog(context),
+                    builder: (context) =>
+                        _buildAddFeelingDialog(context, value),
                   );
                 },
                 child: const Chip(label: Text('Add New Feeling')))
@@ -212,7 +210,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildAddFeelingDialog(BuildContext context) {
+  Widget _buildAddFeelingDialog(BuildContext context, HomeProvider value) {
     return AlertDialog(
       title: Text(
         'Add New Feeling',
@@ -223,15 +221,16 @@ class _HomeViewState extends State<HomeView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           CustomTextFieldWidget(
-            controller: TextEditingController(),
+            controller: value.feelingController,
             textInputType: TextInputType.text,
             hintTitle: 'Feeling Name',
           ),
           Gaps.verticalGapOf(10),
           CustomTextFieldWidget(
-            controller: TextEditingController(),
+            controller: value.feelingEmojiController,
             textInputType: TextInputType.text,
-            hintTitle: 'Feeling Name',
+            hintTitle: 'Feeling Emoji',
+            prefixIcon: Icons.emoji_emotions,
           ),
         ],
       ),
@@ -239,8 +238,11 @@ class _HomeViewState extends State<HomeView> {
       actions: [
         ElevatedButton(
           child: const Text('Add Feeling'),
-          onPressed: () {
-            // Implement your logic here
+          onPressed: () async {
+            await value.addEmoji().then((value) {
+              Navigator.of(context).pop();
+              return Utils.toastMessage('Feeling Added');
+            });
           },
         ),
         ElevatedButton(

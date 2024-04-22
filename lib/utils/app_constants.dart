@@ -13,13 +13,16 @@ class AppConstants {
   static const String bankAcctNum = 'Ijaz Ali';
 
   static List<MoodEmoji> listEmoji = [
-    MoodEmoji(moodEmoji: '😊', moodTitle: 'Happy', isSelected: false),
-    MoodEmoji(moodEmoji: '☹️', moodTitle: 'Sad', isSelected: false),
-    MoodEmoji(moodEmoji: '😂', moodTitle: 'Funny', isSelected: false),
-    MoodEmoji(moodEmoji: '😔', moodTitle: 'Shameful', isSelected: false),
-    MoodEmoji(moodEmoji: '🤦', moodTitle: 'Tired', isSelected: false),
-    MoodEmoji(moodEmoji: '😩', moodTitle: 'Panicked', isSelected: false),
+    MoodEmoji(moodEmoji: '😊', moodTitle: 'Happy'),
+    MoodEmoji(moodEmoji: '☹️', moodTitle: 'Sad'),
+    MoodEmoji(moodEmoji: '😂', moodTitle: 'Funny'),
+    MoodEmoji(moodEmoji: '😔', moodTitle: 'Shameful'),
+    MoodEmoji(moodEmoji: '🤦', moodTitle: 'Tired'),
+    MoodEmoji(moodEmoji: '😩', moodTitle: 'Panicked'),
   ];
+  static const assets = 'assets';
+  static const data = '$assets/data';
+  static const String dbSchemaFile = '$data/schema.db';
 
   static String betProId = '';
   static String betProPass = '';

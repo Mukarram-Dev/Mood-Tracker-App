@@ -4,14 +4,13 @@ import 'package:mood_track/configs/components/custom_text_field.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/configs/theme/text_theme_style.dart';
 import 'package:mood_track/model/mood_emoji.dart';
-import 'package:mood_track/utils/app_constants.dart';
 import 'package:mood_track/utils/dimensions.dart';
 import 'package:mood_track/utils/gaps.dart';
 import 'package:mood_track/view%20model/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
 class BottomSheetMood extends StatelessWidget {
-  const BottomSheetMood({Key? key});
+  const BottomSheetMood({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +46,12 @@ class BottomSheetMood extends StatelessWidget {
                 ),
                 Gaps.verticalGapOf(20),
                 GridView.builder(
-                  itemCount: AppConstants.listEmoji.length,
+                  itemCount: value.listEmoji.length,
                   shrinkWrap: true,
                   primary: false,
                   physics: const ClampingScrollPhysics(),
-                  itemBuilder: (context, index) => _buildEmojiList(
-                      context, AppConstants.listEmoji[index], value),
+                  itemBuilder: (context, index) =>
+                      _buildEmojiList(context, value.listEmoji[index], value),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     crossAxisSpacing: 8,

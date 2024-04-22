@@ -1,10 +1,15 @@
-class MoodEmoji {
-  final String moodEmoji;
-  final String moodTitle;
-  final bool isSelected;
+import 'package:hive_flutter/adapters.dart';
+part 'mood_emoji.g.dart';
 
-  MoodEmoji(
-      {required this.moodEmoji,
-      required this.moodTitle,
-      required this.isSelected});
+@HiveType(typeId: 0)
+class MoodEmoji {
+  @HiveField(0)
+  final String moodTitle;
+  @HiveField(1)
+  final String moodEmoji;
+
+  MoodEmoji({
+    required this.moodEmoji,
+    required this.moodTitle,
+  });
 }

@@ -1,39 +1,31 @@
 class UserModel {
-  final String username;
+  final String name;
+  final String email;
+  final String age;
   final String password;
-  final String phoneNo;
-  final String profileStatus;
-  final String betProId;
-  final String betProPassword;
 
   UserModel({
-    required this.username,
+    required this.age,
+    required this.name,
     required this.password,
-    required this.phoneNo,
-    required this.profileStatus,
-    required this.betProId,
-    required this.betProPassword,
+    required this.email,
   });
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      username: map['username'] ?? '',
+      name: map['name'] ?? '',
       password: map['password'] ?? '',
-      phoneNo: map['phoneNo'] ?? '',
-      profileStatus: map['profileStatus'] ?? '',
-      betProId: map['betProId'] ?? '',
-      betProPassword: map['betProPassword'] ?? '',
+      email: map['phoneNo'] ?? '',
+      age: map['phoneNo'] ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'username': username,
+      'name': name,
       'password': password,
-      'phoneNo': phoneNo,
-      'profileStatus': profileStatus,
-      'betProId': betProId,
-      'betProPassword': betProPassword,
+      'phoneNo': email,
+      'age': age,
     };
   }
 }
