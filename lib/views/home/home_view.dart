@@ -8,9 +8,9 @@ import 'package:mood_track/view%20model/home/home_view_model.dart';
 import 'package:mood_track/views/home/bottomsheet/bottomsheet_home.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:mood_track/views/home/bottomsheet/bottomsheet_mood.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -31,6 +31,7 @@ class _HomeViewState extends State<HomeView> {
   void _fetchUserData() async {
     final provider = Provider.of<HomeProvider>(context, listen: false);
     await provider.setEmojiList();
+    await provider.getUserData();
   }
 
   @override
@@ -55,19 +56,21 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Widget _buildBodyWidget(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            'Recommendation on your mood',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 20),
-          _buildContainerSuggestion(context),
-        ],
+    return Consumer<HomeProvider>(
+      builder: (context, value, child) => Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'Recommendation on your mood',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 20),
+            _buildContainerSuggestion(context, value),
+          ],
+        ),
       ),
     );
   }
@@ -100,10 +103,12 @@ class _HomeViewState extends State<HomeView> {
             ListTile(
               minLeadingWidth: 0,
               contentPadding: const EdgeInsets.all(0),
-              title: Text(
-                'Hi, ${value.userModel?.name},',
-                style: AppTextStyles.poppinsMedium(),
-              ),
+              title: value.isUserLoading
+                  ? _shimmerName()
+                  : Text(
+                      'Hi, ${value.userModel?.name},',
+                      style: AppTextStyles.poppinsMedium(),
+                    ),
               subtitle: Text(
                 'Welcome Back',
                 style: AppTextStyles.interBody(),
@@ -195,19 +200,48 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
             Gaps.verticalGapOf(10),
-            GestureDetector(
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => _buildAddFeelingDialog(context, value),
-                );
-              },
-              child: const Chip(
-                label: Text('Add New Feeling'),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          _buildAddFeelingDialog(context, value),
+                    );
+                  },
+                  child: const Chip(
+                    label: Text('Add New Feeling'),
+                  ),
+                ),
+                value.isUserLoading
+                    ? _shimmerFeelingChip()
+                    : Chip(
+                        label: Text(
+                            '${value.userModel?.feelingEmoji} ${value.userModel?.userFeeling}'),
+                      ),
+              ],
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _shimmerName() {
+    return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: const Text('Hi Name,'));
+  }
+
+  Widget _shimmerFeelingChip() {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: const Chip(
+        label: Text('kahsdk hfka'),
       ),
     );
   }
@@ -257,13 +291,25 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _buildContainerSuggestion(BuildContext context) {
-    return GridView.builder(
-      itemCount: 4,
-      shrinkWrap: true,
-      primary: false,
-      physics: const ClampingScrollPhysics(),
-      itemBuilder: (context, index) => Container(
+  Widget _buildContainerSuggestion(
+      BuildContext context, HomeProvider provider) {
+    if (provider.isActivityLoading) {
+      return _shimmerCall(); // Shimmer effect while waiting for data
+    } else {
+      return _buildGridView(provider);
+    }
+  }
+}
+
+Widget _buildGridView(HomeProvider provider) {
+  return GridView.builder(
+    itemCount: provider.activityList.length,
+    shrinkWrap: true,
+    primary: false,
+    physics: const ClampingScrollPhysics(),
+    itemBuilder: (context, index) {
+      final activity = provider.activityList[index];
+      return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           border: Border.all(color: AppColors.primaryColor),
@@ -273,76 +319,51 @@ class _HomeViewState extends State<HomeView> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                decoration: const BoxDecoration(
-                    color: AppColors.appBarColor, shape: BoxShape.circle),
-                child: const Icon(
-                  Icons.face_retouching_natural_sharp,
-                  color: AppColors.primaryColor,
-                ),
-              ),
-            ),
             Text(
-              'Meditation',
+              activity.name,
               style: AppTextStyles.poppinSmall(),
             ),
-            Row(
-              children: [
-                Text(
-                  'Meditation',
-                  style: AppTextStyles.interSmall(),
-                ),
-                Gaps.horizontalGapOf(5),
-                const Icon(
-                  Icons.circle,
-                  size: 5,
-                ),
-                Gaps.horizontalGapOf(5),
-                Text(
-                  '15 min',
-                  style: AppTextStyles.interSmall(),
-                ),
-              ],
+            Text(
+              activity.description,
+              style: AppTextStyles.interSmall(),
             ),
           ],
         ),
-      ),
+      );
+    },
+    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 2,
+      crossAxisSpacing: 10,
+      mainAxisSpacing: 20,
+    ),
+  );
+}
+
+Widget _shimmerCall() {
+  return Shimmer.fromColors(
+    baseColor: Colors.grey[300]!,
+    highlightColor: Colors.grey[100]!,
+    child: GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 20,
       ),
-    );
-  }
-
-  Widget _buildRowDetailWidget(String title, String itemName) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: AppTextStyles.interBody(),
-        ),
-        Row(
-          children: [
-            Text(
-              itemName,
-              style: AppTextStyles.poppinSmall(
-                  color: AppColors.primaryColor, fontWeight: FontWeight.bold),
-            ),
-            IconButton(
-                onPressed: () async {
-                  await Clipboard.setData(ClipboardData(text: itemName))
-                      .whenComplete(() => Utils.toastMessage('Text Copied'));
-                },
-                icon: const Icon(Icons.copy)),
-          ],
-        ),
-      ],
-    );
-  }
+      itemCount: 5,
+      shrinkWrap: true,
+      primary: false,
+      itemBuilder: (context, index) {
+        return Card(
+          elevation: 1.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: const SizedBox(
+            height: 80,
+            width: 40,
+          ),
+        );
+      },
+    ),
+  );
 }

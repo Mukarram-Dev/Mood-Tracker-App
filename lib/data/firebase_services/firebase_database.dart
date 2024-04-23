@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:mood_track/model/activity.dart';
 import 'package:mood_track/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -69,6 +70,21 @@ class DataServices {
     }
   }
 
+  Future<List<Activity>> getActivitiesByMood(String mood) async {
+    final activitiesRef = FirebaseDatabase.instance.ref().child('activities');
+    final event = await activitiesRef.child(mood.toLowerCase()).once();
+    List<Activity> activities = [];
+    if (event.snapshot.value != null) {
+      final datasnapshot = event.snapshot;
+      for (var element in datasnapshot.children) {
+        final activity = Activity.fromJson(
+            Map<String, dynamic>.from(element.value as Map<dynamic, dynamic>));
+        activities.add(activity);
+      }
+    }
+    return activities;
+  }
+
 // Method to fetch user data from the Realtime Database
   Future<UserModel?> getCurrentUserData() async {
     try {
@@ -91,4 +107,49 @@ class DataServices {
       throw Exception(e.toString());
     }
   }
+
+  // Future<void> addActivitiesToFirebase() async {
+  //   DatabaseReference activitiesRef =
+  //       FirebaseDatabase.instance.ref().child('activities');
+
+  //   // Iterate through the moodActivities list
+  //   for (int i = 0; i < AppConstants.moodActivities.length; i++) {
+  //     List<Activity> activities = AppConstants.moodActivities[i];
+  //     String mood =
+  //         _getMoodName(i); // Function to get the mood name based on index
+
+  //     // Iterate through the activities for the current mood
+  //     for (int j = 0; j < activities.length; j++) {
+  //       Activity activity = activities[j];
+  //       // Generate a unique key for each activity
+  //       String? key = activitiesRef.child(mood).push().key;
+
+  //       // Set the activity data in Firebase under the corresponding mood node
+  //       await activitiesRef.child(mood).child(key ?? '').set(activity.toJson());
+  //     }
+  //   }
+
+  //   print('Activities added to Firebase successfully.');
+  // }
+
+  // String _getMoodName(int index) {
+  //   switch (index) {
+  //     case 0:
+  //       return 'happy';
+  //     case 1:
+  //       return 'sad';
+  //     case 2:
+  //       return 'funny';
+  //     case 3:
+  //       return 'shameful';
+  //     case 4:
+  //       return 'tired';
+  //     case 5:
+  //       return 'angry';
+  //     case 6:
+  //       return 'proud';
+  //     default:
+  //       return '';
+  //   }
+  // }
 }
