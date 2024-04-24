@@ -1,4 +1,5 @@
 import 'package:mood_track/views/login/login_view.dart';
+import 'package:mood_track/views/mood%20entry/mood_entry_view.dart';
 import 'package:mood_track/views/signup/signup_view.dart';
 import 'package:mood_track/views/splash/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,9 @@ class AppRoutes {
       case RouteName.signupRoute:
         return MaterialPageRoute(
             builder: (BuildContext context) => const SignUpView());
+      case RouteName.moodEntryRoute:
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const MoodEntryView());
 
       default:
         return MaterialPageRoute(builder: (_) {

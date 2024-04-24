@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:mood_track/model/activity.dart';
+import 'package:mood_track/model/mood_history.dart';
 import 'package:mood_track/model/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -40,9 +41,9 @@ class DataServices {
     try {
       await _dbRef
           .child('Users')
-          .child(userId)
+          .child(currentUser!.uid)
           .child('user_moods')
-          .child(dateTime)
+          .push()
           .set(data)
           .onError((error, stackTrace) => onError(error.toString()));
 
@@ -83,6 +84,23 @@ class DataServices {
       }
     }
     return activities;
+  }
+
+  Future<List<MoodHistory>> getUserMoodHistory() async {
+    final userMoodRef = FirebaseDatabase.instance.ref().child('Users');
+    final event =
+        await userMoodRef.child(currentUser!.uid).child('user_moods').once();
+
+    List<MoodHistory> moodsList = [];
+    if (event.snapshot.value != null) {
+      final datasnapshot = event.snapshot;
+      for (var element in datasnapshot.children) {
+        final moods = MoodHistory.fromJson(
+            Map<String, dynamic>.from(element.value as Map<dynamic, dynamic>));
+        moodsList.add(moods);
+      }
+    }
+    return moodsList;
   }
 
 // Method to fetch user data from the Realtime Database

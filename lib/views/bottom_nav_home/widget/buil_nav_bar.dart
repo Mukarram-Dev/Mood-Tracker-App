@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:mood_track/configs/assets/image_assets.dart';
-import 'package:mood_track/configs/routes/routes_name.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/views/bottom_nav_home/nav_controller/nav_controller.dart';
 
@@ -16,11 +15,7 @@ buildBottomNavigationMenu(context) {
           showUnselectedLabels: true,
           showSelectedLabels: true,
           onTap: (index) {
-            if (index == 3) {
-              Navigator.pushNamed(context, RouteName.betProRoute);
-            } else {
-              provider.changeTabIndex(index);
-            }
+            provider.changeTabIndex(index);
           },
           currentIndex: provider.tabIndex.value,
           backgroundColor: AppColors.primaryColor,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mood_track/views/monthly%20report/monthly_report.dart';
+import 'package:mood_track/views/weekly%20report/weekly_report.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mood_track/views/bottom_nav_home/nav_controller/nav_controller.dart';
@@ -12,8 +14,8 @@ class BottomNavHome extends StatelessWidget {
   Widget build(BuildContext context) {
     var navScreens = [
       const HomeView(),
-      // const DepositView(),
-      // const WithdrawView(),
+      const WeeklyReportView(),
+      const MonthlyReportView(),
     ];
 
     return Scaffold(

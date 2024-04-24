@@ -11,7 +11,8 @@ class HomeProvider with ChangeNotifier {
   UserModel? _userModel;
   UserModel? get userModel => _userModel;
 
-  final String _currentDay = DateFormat('dd MMM, yyyy').format(DateTime.now());
+  final String _currentDay =
+      DateFormat('dd MMM, yyyy - hh:mm a').format(DateTime.now());
   String get currentDay => _currentDay;
 
   String _selectedMood = 'Happy';
@@ -55,7 +56,7 @@ class HomeProvider with ChangeNotifier {
       'feelingName': _selectedMood,
       'feelingEmoji': _listEmoji[_selectedIndex].moodEmoji,
       'reason': reasonController.text,
-      'date': _currentDay,
+      'date': DateFormat('dd MMM, yyyy - hh:mm a').format(DateTime.now()),
     };
     await _dbService.addUserCurrentFeeling(
       data: data,

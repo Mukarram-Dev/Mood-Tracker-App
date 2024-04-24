@@ -1,5 +1,6 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:mood_track/configs/components/custom_text_field.dart';
+import 'package:mood_track/configs/routes/routes_name.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/configs/theme/text_theme_style.dart';
 import 'package:mood_track/utils/gaps.dart';
@@ -8,7 +9,6 @@ import 'package:mood_track/view%20model/home/home_view_model.dart';
 import 'package:mood_track/views/home/bottomsheet/bottomsheet_home.dart';
 
 import 'package:flutter/material.dart';
-import 'package:mood_track/views/home/bottomsheet/bottomsheet_mood.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -146,20 +146,8 @@ class _HomeViewState extends State<HomeView> {
             ),
             Gaps.verticalGapOf(20),
             GestureDetector(
-              onTap: () => showModalBottomSheet(
-                builder: (context) => const BottomSheetMood(),
-                context: context,
-                elevation: 10,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(30.0),
-                  topRight: Radius.circular(30.0),
-                )),
-                constraints: const BoxConstraints(
-                    minWidth: double.infinity, minHeight: 150),
-                enableDrag: true,
-                backgroundColor: Colors.transparent,
-              ),
+              onTap: () =>
+                  Navigator.pushNamed(context, RouteName.moodEntryRoute),
               child: Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 10),

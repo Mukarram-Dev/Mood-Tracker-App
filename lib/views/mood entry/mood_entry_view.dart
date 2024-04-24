@@ -11,20 +11,20 @@ import 'package:mood_track/utils/utils.dart';
 import 'package:mood_track/view%20model/home/home_view_model.dart';
 import 'package:provider/provider.dart';
 
-class BottomSheetMood extends StatelessWidget {
-  const BottomSheetMood({super.key});
+class MoodEntryView extends StatelessWidget {
+  const MoodEntryView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(
+          'Your Feeling Today',
+          style: AppTextStyles.poppinsMedium(color: AppColors.secondaryColor),
         ),
       ),
-      child: SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.paddingSizeDefault),
           child: Consumer<HomeProvider>(
@@ -33,18 +33,9 @@ class BottomSheetMood extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Gaps.verticalGapOf(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'How are you feeling today?',
-                      style: AppTextStyles.poppinsNormal(),
-                    ),
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(Icons.close),
-                    )
-                  ],
+                Text(
+                  'How are you feeling today?',
+                  style: AppTextStyles.poppinsNormal(),
                 ),
                 Gaps.verticalGapOf(20),
                 GridView.builder(
@@ -65,6 +56,7 @@ class BottomSheetMood extends StatelessWidget {
                 CustomTextFieldWidget(
                   controller: value.reasonController,
                   textInputType: TextInputType.multiline,
+                  maxLines: 4,
                   hintTitle: 'Reason for your mood',
                 ),
                 Gaps.verticalGapOf(20),

@@ -8,11 +8,10 @@ class CustomTextFieldWidget extends StatelessWidget {
   final String hintTitle;
   final String? Function(String?)? validator;
   final String? errorText;
-
   final Color borderColor;
-  final IconData prefixIcon;
-
+  final IconData? prefixIcon;
   final Function(String)? onFieldSubmitted;
+  final int? maxLines;
 
   const CustomTextFieldWidget({
     super.key,
@@ -24,7 +23,8 @@ class CustomTextFieldWidget extends StatelessWidget {
     this.errorText,
     this.borderColor = const Color(0xffa90084),
     this.onFieldSubmitted,
-    this.prefixIcon = Icons.abc,
+    this.prefixIcon,
+    this.maxLines = 1,
   });
 
   @override
@@ -34,6 +34,7 @@ class CustomTextFieldWidget extends StatelessWidget {
       color: AppColors.primaryColor.withOpacity(0.1),
       child: TextFormField(
           controller: controller,
+          maxLines: maxLines,
           obscureText: isObsecureText,
           validator: validator,
           keyboardType: textInputType,
