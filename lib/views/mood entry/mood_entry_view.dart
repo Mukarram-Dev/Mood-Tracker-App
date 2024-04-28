@@ -69,7 +69,6 @@ class MoodEntryView extends StatelessWidget {
                         .addUserCurrentMood()
                         .whenComplete(() => Navigator.pop(context))
                         .then((a) {
-                      Navigator.pop(context);
                       Utils.toastMessage('Added Successfully');
                       value.resetReasonController();
                     });

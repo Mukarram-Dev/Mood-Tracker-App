@@ -7,112 +7,119 @@ class ReportProvider extends ChangeNotifier {
   List<MoodHistory> _moodHistoryList = [];
   List<MoodHistory> get moodHistoryList => _moodHistoryList;
 
-  bool _isHistoryLoading = true;
-  bool get isHistoryLoading => _isHistoryLoading;
+  List<MoodHistory> _weeklyMoodList = [];
+  List<MoodHistory> get weeklyMoodList => _weeklyMoodList;
+
+  List<MoodHistory> _monthlyMoodList = [];
+  List<MoodHistory> get monthlyMoodList => _monthlyMoodList;
+
+  bool _isWeeklyListLoading = true;
+  bool get isHistoryLoading => _isWeeklyListLoading;
 
   final _dbService = DataServices();
 
-  double _weeklyAverage = 0.0;
-  double get weeklyAverage => _weeklyAverage;
+  String _weeklyAverage = '';
+  String get weeklyAverage => _weeklyAverage;
+
+  String _monthlyAverage = '';
+  String get monthlyAverage => _monthlyAverage;
+
+  Future<void> getWeeklyMoodHistory(DateTime startDate) async {
+    final endDate = startDate.add(const Duration(days: 7));
+    final weeklyMoodHistory = _moodHistoryList.where((mood) {
+      final date = DateFormat('dd MMM, yyyy - hh:mm a').parse(mood.date, true);
+      return date.isAfter(startDate) && date.isBefore(endDate);
+    }).toList();
+    _weeklyMoodList = weeklyMoodHistory;
+    await calculateWeeklyAverage(); // Calculate weekly average mood
+  }
+
+  Future<void> getMonthlyMoodHistory(DateTime startDate) async {
+    final endDate =
+        DateTime(startDate.year, startDate.month + 1, 0, 23, 59, 59);
+    final monthlyMoodHistory = _moodHistoryList.where((mood) {
+      final date = DateFormat('dd MMM, yyyy - hh:mm a').parse(mood.date, true);
+      return date.isAfter(startDate) && date.isBefore(endDate);
+    }).toList();
+    _monthlyMoodList = monthlyMoodHistory;
+    await calculateMonthlyAverage(); // Calculate monthly average mood
+  }
 
   Future<void> getMoodHistory() async {
     try {
-      _isHistoryLoading = true;
-
-      final historyList = await _dbService.getUserMoodHistory();
-      _moodHistoryList = historyList;
-      await getWeeklyAverageMood();
-      _isHistoryLoading = false;
-      notifyListeners();
+      _isWeeklyListLoading = true;
+      _moodHistoryList = await _dbService.getUserMoodHistory();
     } catch (error) {
       if (kDebugMode) {
-        print('Error fetching activity data: $error');
+        print('Error fetching mood history: $error');
       }
-      throw Exception(
-          error); // Rethrow the error for higher-level error handling
+      throw Exception(error);
     } finally {
-      _isHistoryLoading = false;
+      _isWeeklyListLoading = false;
+      notifyListeners();
     }
   }
 
-  double calculateAverageMood(DateTime startDate, DateTime endDate) {
+  Future<void> calculateWeeklyAverage() async {
+    final today = DateTime.now();
+    final startDate = DateTime(today.year, today.month, today.day, 0, 0, 0);
+    final endDate = startDate.add(const Duration(days: 7));
+    _weeklyAverage = _calculateAverageMood(startDate, endDate);
+    notifyListeners();
+  }
+
+  Future<void> calculateMonthlyAverage() async {
+    final today = DateTime.now();
+    final startDate = DateTime(today.year, today.month, 1, 0, 0, 0);
+    final daysOfMonth = daysInMonth(today.year, today.month);
+    final endDate = startDate.add(Duration(days: daysOfMonth, hours: 23));
+    _monthlyAverage = _calculateAverageMood(startDate, endDate);
+    notifyListeners();
+  }
+
+  String _calculateAverageMood(DateTime startDate, DateTime endDate) {
     final filteredMoods = _moodHistoryList.where((mood) {
-      final date = DateFormat('dd MMM, yyyy - hh:mm a')
-          .parse(mood.date, true); // Parse with lenient mode
+      final date = DateFormat('dd MMM, yyyy - hh:mm a').parse(mood.date, true);
       return date.isAfter(startDate) && date.isBefore(endDate) ||
           date.isAtSameMomentAs(startDate) ||
-          date.isAtSameMomentAs(endDate); // Include dates at the boundaries
+          date.isAtSameMomentAs(endDate);
     }).toList();
+
     if (filteredMoods.isEmpty) {
-      return 0.0; // Handle no mood entries in the period
+      return ''; // Handle no mood entries in the period
     }
 
-    final totalMoodValue =
-        filteredMoods.fold(0, (sum, mood) => sum + mood.moodNo);
-    return totalMoodValue / filteredMoods.length;
-  }
+    Map<int, int> moodCounts = {};
+    int maxCount = 0;
+    int mostRepeatedMoodNo = 0;
 
-  Future<double> getWeeklyAverageMood() async {
-    final today = DateTime.now();
-    final startDate = today.subtract(Duration(
-        days:
-            today.weekday - 1)); // Start from the beginning of the current week
-    final endDate = today.add(Duration(
-        days: DateTime.daysPerWeek -
-            today.weekday)); // End at the end of the current week
-    _weeklyAverage = calculateAverageMood(startDate, endDate);
-    notifyListeners();
-    return _weeklyAverage;
-  }
-
-  Map<String, List<int>> calculateWeeklyAverage() {
-    // Initialize weekly data map
-    Map<String, List<int>> weeklyData = {};
-
-    // Iterate through mood history and calculate weekly averages
-    for (var moodEntry in _moodHistoryList) {
-      DateTime moodDate =
-          DateFormat('dd MMM, yyyy - hh:mm a').parse(moodEntry.date);
-      String weekOfYear = DateFormat('ww yyyy').format(moodDate);
-      if (!weeklyData.containsKey(weekOfYear)) {
-        weeklyData[weekOfYear] = [0, 0]; // mood sum, count
-      }
-      weeklyData[weekOfYear]![0] += moodEntry.moodNo;
-      weeklyData[weekOfYear]![1]++;
+    // Count occurrences of each moodNo
+    for (var mood in filteredMoods) {
+      moodCounts[mood.moodNo] ??= 0;
+      moodCounts[mood.moodNo] =
+          moodCounts[mood.moodNo]! + 1; // Increment the count
     }
 
-    // Calculate average for each week
-    weeklyData.forEach((week, data) {
-      if (data[1] > 0) {
-        weeklyData[week]![0] = (weeklyData[week]![0] / data[1]).round();
+    // Find moodNo with the highest count
+    moodCounts.forEach((moodNo, count) {
+      if (count > maxCount) {
+        maxCount = count;
+        mostRepeatedMoodNo = moodNo;
       }
     });
 
-    return weeklyData;
+    final moodName = _moodHistoryList
+        .firstWhere((element) => element.moodNo == mostRepeatedMoodNo)
+        .feelingName;
+
+    final moodEmoji = _moodHistoryList
+        .firstWhere((element) => element.moodNo == mostRepeatedMoodNo)
+        .feelingEmoji;
+
+    return '$moodEmoji\n$moodName';
   }
 
-  Map<String, List<int>> calculateMonthlyAverage() {
-    // Initialize monthly data map
-    Map<String, List<int>> monthlyData = {};
-
-    // Iterate through mood history and calculate monthly averages
-    for (var moodEntry in _moodHistoryList) {
-      DateTime moodDate = DateFormat('dd MMM, yyyy').parse(moodEntry.date);
-      String month = DateFormat('MMM yyyy').format(moodDate);
-      if (!monthlyData.containsKey(month)) {
-        monthlyData[month] = [0, 0]; // mood sum, count
-      }
-      monthlyData[month]![0] += moodEntry.moodNo;
-      monthlyData[month]![1]++;
-    }
-
-    // Calculate average for each month
-    monthlyData.forEach((month, data) {
-      if (data[1] > 0) {
-        monthlyData[month]![0] = (monthlyData[month]![0] / data[1]).round();
-      }
-    });
-
-    return monthlyData;
+  int daysInMonth(int year, int month) {
+    return DateTime(year, month + 1, 0).day;
   }
 }

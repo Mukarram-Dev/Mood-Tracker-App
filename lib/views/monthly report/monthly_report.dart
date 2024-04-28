@@ -15,7 +15,14 @@ class _MonthlyReportViewState extends State<MonthlyReportView> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ReportProvider>(context, listen: false).getMoodHistory();
+    Future.delayed(Duration.zero, () {
+      _fetchMonthlyHistory();
+    });
+  }
+
+  _fetchMonthlyHistory() async {
+    await Provider.of<ReportProvider>(context, listen: false)
+        .getMonthlyMoodHistory(DateTime.now());
   }
 
   @override
@@ -31,7 +38,7 @@ class _MonthlyReportViewState extends State<MonthlyReportView> {
         body: RefreshIndicator(
           onRefresh: () async =>
               await Provider.of<ReportProvider>(context, listen: false)
-                  .getMoodHistory(),
+                  .getMonthlyMoodHistory(DateTime.now()),
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             child: Consumer<ReportProvider>(
@@ -46,9 +53,9 @@ class _MonthlyReportViewState extends State<MonthlyReportView> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildMoodList(value),
-                        const SizedBox(height: 20),
                         _buildAverageMood(),
+                        const SizedBox(height: 20),
+                        _buildMoodList(value),
                       ],
                     ),
                   );
@@ -133,15 +140,26 @@ class _MonthlyReportViewState extends State<MonthlyReportView> {
       children: [
         const SizedBox(height: 20),
         Text(
-          'Average Mood for the Month',
+          'Average Mood of the Month',
           style: AppTextStyles.poppinsNormal(),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         Consumer<ReportProvider>(
-          builder: (context, value, child) => Text(
-            'Average Mood: ${value.weeklyAverage.toStringAsFixed(1)}',
-            style:
-                AppTextStyles.interBody(), // You can adjust the style as needed
+          builder: (context, value, child) => Container(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.primaryColor.withOpacity(0.4),
+            ),
+            child: Center(
+              child: Text(
+                textAlign: TextAlign.center,
+                value.monthlyAverage,
+                style: AppTextStyles.poppinsNormal(
+                  color: AppColors.secondaryColor,
+                ), // You can adjust the style as needed
+              ),
+            ),
           ),
         ),
       ],

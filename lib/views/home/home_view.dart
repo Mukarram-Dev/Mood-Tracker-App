@@ -6,6 +6,7 @@ import 'package:mood_track/configs/theme/text_theme_style.dart';
 import 'package:mood_track/utils/gaps.dart';
 import 'package:mood_track/utils/utils.dart';
 import 'package:mood_track/view%20model/home/home_view_model.dart';
+import 'package:mood_track/view%20model/report%20provider/report_provider.dart.dart';
 import 'package:mood_track/views/home/bottomsheet/bottomsheet_home.dart';
 
 import 'package:flutter/material.dart';
@@ -30,8 +31,10 @@ class _HomeViewState extends State<HomeView> {
 
   void _fetchUserData() async {
     final provider = Provider.of<HomeProvider>(context, listen: false);
+    final reportProvider = Provider.of<ReportProvider>(context, listen: false);
     await provider.setEmojiList();
     await provider.getUserData();
+    await reportProvider.getMoodHistory();
   }
 
   @override
@@ -106,7 +109,7 @@ class _HomeViewState extends State<HomeView> {
               title: value.isUserLoading
                   ? _shimmerName()
                   : Text(
-                      'Hi, ${value.userModel?.name},',
+                      'Hi ${value.userModel?.name},',
                       style: AppTextStyles.poppinsMedium(),
                     ),
               subtitle: Text(

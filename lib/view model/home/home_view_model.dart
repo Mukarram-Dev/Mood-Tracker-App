@@ -47,6 +47,11 @@ class HomeProvider with ChangeNotifier {
   }
 
   Future<void> addUserCurrentMood() async {
+    if (reasonController.text.isEmpty) {
+      Utils.toastMessage('Reason Can\'t be empty');
+      return;
+    }
+
     final dateTime = DateTime.now()
         .toIso8601String()
         .replaceAll(RegExp(r'[^a-zA-Z0-9]'), '_');
@@ -63,7 +68,9 @@ class HomeProvider with ChangeNotifier {
       userId: _dbService.currentUser!.uid,
       dateTime: dateTime,
       onError: (error) => Utils.toastMessage(error),
-      onSuccess: () => updateUser(),
+      onSuccess: () {
+        return updateUser();
+      },
     );
   }
 
@@ -143,5 +150,6 @@ class HomeProvider with ChangeNotifier {
   void resetReasonController() {
     reasonController.clear();
     _selectedMood = 'Happy';
+    _selectedIndex = 0;
   }
 }
