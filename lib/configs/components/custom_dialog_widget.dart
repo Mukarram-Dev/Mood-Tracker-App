@@ -111,7 +111,7 @@ class CustomDialogWidget {
                     child: Text(
                       'Cancel',
                       style: TextStyle(
-                        color: theme.textTheme.bodyText2?.color,
+                        color: theme.textTheme.bodyMedium?.color,
                       ),
                     ),
                     onPressed: () => Navigator.of(context).pop(false),
