@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/configs/theme/text_theme_style.dart';
+import 'package:mood_track/utils/app_constants.dart';
 import 'package:mood_track/view%20model/report%20provider/report_provider.dart.dart';
+import 'package:mood_track/views/weekly%20report/widget/history_listview.dart';
 import 'package:provider/provider.dart';
 
 class WeeklyReportView extends StatefulWidget {
@@ -27,41 +29,54 @@ class _WeeklyReportViewState extends State<WeeklyReportView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Weekly Mood Report',
-            style: AppTextStyles.poppinsMedium(),
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize:
+            Size(double.infinity, MediaQuery.of(context).size.height * 0.23),
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: AppColors.primaryColor.withOpacity(0.7),
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(40),
+              bottomRight: Radius.circular(40),
+            ),
+            image: const DecorationImage(
+              opacity: 0.7,
+              fit: BoxFit.cover,
+              image: NetworkImage(
+                AppConstants.emojiBackground,
+              ),
+            ),
           ),
         ),
-        body: RefreshIndicator(
-          onRefresh: () async =>
-              await Provider.of<ReportProvider>(context, listen: false)
-                  .getWeeklyMoodHistory(DateTime.now()),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Consumer<ReportProvider>(
-              builder: (context, value, child) {
-                if (value.isHistoryLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildAverageMood(),
-                        const SizedBox(height: 20),
-                        _buildMoodList(value),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
+      ),
+      body: RefreshIndicator(
+        onRefresh: () async =>
+            await Provider.of<ReportProvider>(context, listen: false)
+                .getWeeklyMoodHistory(DateTime.now()),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Consumer<ReportProvider>(
+            builder: (context, value, child) {
+              if (value.isHistoryLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildAverageMood(),
+                      const SizedBox(height: 20),
+                      _buildMoodList(value),
+                    ],
+                  ),
+                );
+              }
+            },
           ),
         ),
       ),
@@ -83,51 +98,13 @@ class _WeeklyReportViewState extends State<WeeklyReportView> {
         ),
         const SizedBox(height: 10),
         ListView.separated(
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
+          separatorBuilder: (context, index) => const SizedBox(height: 20),
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: value.moodHistoryList.length,
           itemBuilder: (context, index) {
             final moodEntry = value.moodHistoryList[index];
-            return Container(
-              decoration: BoxDecoration(
-                color: AppColors.primaryColor.withOpacity(0.4),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: AppColors.white,
-                        child: Text(
-                          moodEntry.feelingEmoji,
-                          style: AppTextStyles.interHeading(),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        moodEntry.feelingName,
-                        style: AppTextStyles.poppinsNormal(),
-                      ),
-                      const SizedBox(height: 5),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    moodEntry.reason,
-                    style: AppTextStyles.interBody(),
-                  ),
-                  const SizedBox(height: 20),
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Text(moodEntry.date),
-                  ),
-                ],
-              ),
-            );
+            return HistoryListview(moodHistory: moodEntry);
           },
         ),
       ],
