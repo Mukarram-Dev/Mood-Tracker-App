@@ -48,6 +48,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Mood Tracker',
         theme: ThemeData(
+          scaffoldBackgroundColor: AppColors.white,
           colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryColor),
         ),
         // this is the initial route indicating from where our app will start

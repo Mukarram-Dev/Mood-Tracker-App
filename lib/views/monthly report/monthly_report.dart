@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/configs/theme/text_theme_style.dart';
 import 'package:mood_track/view%20model/report%20provider/report_provider.dart.dart';
+import 'package:mood_track/views/weekly%20report/widget/top_appbar_widget.dart';
 import 'package:provider/provider.dart';
 
 class MonthlyReportView extends StatefulWidget {
@@ -27,41 +28,36 @@ class _MonthlyReportViewState extends State<MonthlyReportView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            'Monthly Mood Report',
-            style: AppTextStyles.poppinsMedium(),
-          ),
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async =>
-              await Provider.of<ReportProvider>(context, listen: false)
-                  .getMonthlyMoodHistory(DateTime.now()),
-          child: SingleChildScrollView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            child: Consumer<ReportProvider>(
-              builder: (context, value, child) {
-                if (value.isHistoryLoading) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else {
-                  return Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildAverageMood(),
-                        const SizedBox(height: 20),
-                        _buildMoodList(value),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
+    return Scaffold(
+      appBar: PreferredSize(
+          preferredSize:
+              Size(double.infinity, MediaQuery.of(context).size.height * 0.23),
+          child: const TopAppbarWidget(title: 'Monthly Report')),
+      body: RefreshIndicator(
+        onRefresh: () async =>
+            await Provider.of<ReportProvider>(context, listen: false)
+                .getMonthlyMoodHistory(DateTime.now()),
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Consumer<ReportProvider>(
+            builder: (context, value, child) {
+              if (value.isHistoryLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      _buildMoodList(value),
+                    ],
+                  ),
+                );
+              }
+            },
           ),
         ),
       ),
@@ -129,38 +125,6 @@ class _MonthlyReportViewState extends State<MonthlyReportView> {
               ),
             );
           },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAverageMood() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 20),
-        Text(
-          'Average Mood of the Month',
-          style: AppTextStyles.poppinsNormal(),
-        ),
-        const SizedBox(height: 20),
-        Consumer<ReportProvider>(
-          builder: (context, value, child) => Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.primaryColor.withOpacity(0.4),
-            ),
-            child: Center(
-              child: Text(
-                textAlign: TextAlign.center,
-                value.monthlyAverage,
-                style: AppTextStyles.poppinsNormal(
-                  color: AppColors.secondaryColor,
-                ), // You can adjust the style as needed
-              ),
-            ),
-          ),
         ),
       ],
     );

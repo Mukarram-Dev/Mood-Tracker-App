@@ -18,7 +18,7 @@ class HistoryListview extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: AppColors.appBarColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(

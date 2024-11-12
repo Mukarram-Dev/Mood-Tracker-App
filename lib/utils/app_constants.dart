@@ -7,7 +7,7 @@ class AppConstants {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmLjBGzXg4xsR27_DTvGti5TXMYYjNF2mUlg&s';
 
   static const emojiBackground =
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSO5g0_2XcqUJyDGMhmAkncdFJ6-0_RfsPWVw&s';
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrzHHWT71fu7WdUttwy6wbchHc9ZVb-wCovA&s';
 
   static List<MoodEmoji> listEmoji = [
     MoodEmoji(moodEmoji: '😊', moodTitle: 'Happy'),

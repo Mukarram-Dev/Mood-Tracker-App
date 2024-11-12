@@ -63,7 +63,7 @@ Widget _buildFeelingContainer(BuildContext context) {
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.4),
+        color: AppColors.primaryColor.withOpacity(0.9),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Center(

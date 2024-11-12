@@ -65,9 +65,9 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'Recommendation on your mood',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            Text(
+              'Recommendation For You',
+              style: AppTextStyles.poppinsMedium(),
             ),
             const SizedBox(height: 20),
             _buildContainerSuggestion(context, value),
@@ -90,6 +90,7 @@ class _HomeViewState extends State<HomeView> {
     return FloatingActionButton(
       shape: const StadiumBorder(),
       child: const Icon(Icons.add),
+      backgroundColor: AppColors.primaryColor,
       onPressed: () {
         showDialog(
           context: context,
@@ -111,8 +112,16 @@ Widget _buildGridView(HomeProvider provider) {
       return Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          border: Border.all(color: AppColors.primaryColor),
+          color: AppColors.appBarColor,
           borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.4),
+              offset: const Offset(0, 3),
+              blurRadius: 5,
+              spreadRadius: 0.5,
+            ),
+          ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -120,11 +129,11 @@ Widget _buildGridView(HomeProvider provider) {
           children: [
             Text(
               activity.name,
-              style: AppTextStyles.poppinSmall(),
+              style: AppTextStyles.poppinsNormal(),
             ),
             Text(
               activity.description,
-              style: AppTextStyles.interSmall(),
+              style: AppTextStyles.interBody(),
             ),
           ],
         ),
@@ -132,7 +141,7 @@ Widget _buildGridView(HomeProvider provider) {
     },
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
-      crossAxisSpacing: 10,
+      crossAxisSpacing: 20,
       mainAxisSpacing: 20,
     ),
   );
