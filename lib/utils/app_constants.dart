@@ -3,6 +3,9 @@ import 'package:mood_track/model/mood_emoji.dart';
 class AppConstants {
   static const String appName = 'Mood Tracking App';
 
+  static const profilePic =
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmLjBGzXg4xsR27_DTvGti5TXMYYjNF2mUlg&s';
+
   static List<MoodEmoji> listEmoji = [
     MoodEmoji(moodEmoji: '😊', moodTitle: 'Happy'),
     MoodEmoji(moodEmoji: '☹️', moodTitle: 'Sad'),

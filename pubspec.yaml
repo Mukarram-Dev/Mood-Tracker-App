@@ -58,6 +58,7 @@ dependencies:
   flutter_charts: ^0.5.2
   firebase_core_web: ^2.16.0
   simple_circular_progress_bar: ^1.0.2
+  win32: ^5.8.0
 
 dev_dependencies:
   hive_generator: ^1.1.3

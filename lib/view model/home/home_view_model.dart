@@ -11,8 +11,7 @@ class HomeProvider with ChangeNotifier {
   UserModel? _userModel;
   UserModel? get userModel => _userModel;
 
-  final String _currentDay =
-      DateFormat('dd MMM, yyyy - hh:mm a').format(DateTime.now());
+  final String _currentDay = DateFormat('MMM dd, yyyy').format(DateTime.now());
   String get currentDay => _currentDay;
 
   String _selectedMood = 'Happy';

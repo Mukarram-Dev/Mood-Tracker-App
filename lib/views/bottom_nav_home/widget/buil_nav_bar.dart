@@ -7,28 +7,25 @@ import 'package:mood_track/views/bottom_nav_home/nav_controller/nav_controller.d
 
 buildBottomNavigationMenu(context) {
   return Consumer<NavPageController>(
-    builder: (context, provider, child) => Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),
-        child: BottomNavigationBar(
-          showUnselectedLabels: true,
-          showSelectedLabels: true,
-          onTap: (index) {
-            provider.changeTabIndex(index);
-          },
-          currentIndex: provider.tabIndex.value,
-          backgroundColor: AppColors.primaryColor,
-          unselectedItemColor: AppColors.black,
-          selectedItemColor: AppColors.white,
-          items: [
-            buildNavItem(ImageAssets.homeFilled, ImageAssets.homeIcon, 'Home'),
-            buildNavItem(ImageAssets.depositFilledIcon, ImageAssets.depositIcon,
-                'Weekly Report'),
-            buildNavItem(ImageAssets.withdrawFilledIcon,
-                ImageAssets.withdrawFilledIcon, 'Monthly Report'),
-          ],
-        ),
+    builder: (context, provider, child) => ClipRRect(
+      borderRadius: BorderRadius.circular(25),
+      child: BottomNavigationBar(
+        showUnselectedLabels: true,
+        showSelectedLabels: true,
+        onTap: (index) {
+          provider.changeTabIndex(index);
+        },
+        currentIndex: provider.tabIndex.value,
+        backgroundColor: AppColors.primaryColor,
+        unselectedItemColor: AppColors.black,
+        selectedItemColor: AppColors.white,
+        items: [
+          buildNavItem(ImageAssets.homeFilled, ImageAssets.homeIcon, 'Home'),
+          buildNavItem(ImageAssets.depositFilledIcon, ImageAssets.depositIcon,
+              'Weekly Report'),
+          buildNavItem(ImageAssets.withdrawFilledIcon,
+              ImageAssets.withdrawFilledIcon, 'Monthly Report'),
+        ],
       ),
     ),
   );
