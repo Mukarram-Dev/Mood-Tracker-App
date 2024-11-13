@@ -35,7 +35,11 @@ class TopAppbarWidget extends StatelessWidget {
             left: 100,
             child: Consumer<ReportProvider>(
               builder: (context, value, child) {
-                print(value.weeklyAverage);
+                final isMonthOrWeek = title.split(' ').first;
+                final moodAverage =
+                    isMonthOrWeek.toLowerCase().contains('weekly')
+                        ? value.weeklyAverage
+                        : value.monthlyAverage;
                 return Column(
                   children: [
                     CircleAvatar(
@@ -47,9 +51,10 @@ class TopAppbarWidget extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 40,
                           child: Text(
-                            value.weeklyAverage,
+                            moodAverage,
                             style: AppTextStyles.poppinsNormal(
                               color: AppColors.black,
+                              fontSize: 50,
                             ),
                           ),
                         ),
@@ -57,7 +62,7 @@ class TopAppbarWidget extends StatelessWidget {
                     ),
                     Gaps.verticalGapOf(20),
                     Text(
-                      'Your Average Mood',
+                      'Your $isMonthOrWeek Mood',
                       style: AppTextStyles.poppinsMedium(
                         color: AppColors.white,
                       ),

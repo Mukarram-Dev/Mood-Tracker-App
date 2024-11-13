@@ -89,7 +89,6 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildFloatingButton() {
     return FloatingActionButton(
       shape: const StadiumBorder(),
-      child: const Icon(Icons.add),
       backgroundColor: AppColors.primaryColor,
       onPressed: () {
         showDialog(
@@ -97,6 +96,7 @@ class _HomeViewState extends State<HomeView> {
           builder: (context) => _buildAddFeelingDialog(context),
         );
       },
+      child: const Icon(Icons.add),
     );
   }
 }

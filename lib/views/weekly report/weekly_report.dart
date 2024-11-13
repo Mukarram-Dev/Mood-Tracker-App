@@ -32,7 +32,7 @@ class _WeeklyReportViewState extends State<WeeklyReportView> {
     return Scaffold(
       appBar: PreferredSize(
           preferredSize:
-              Size(double.infinity, MediaQuery.of(context).size.height * 0.23),
+              Size(double.infinity, MediaQuery.of(context).size.height * 0.21),
           child: const TopAppbarWidget(title: 'Weekly Report')),
       body: RefreshIndicator(
         onRefresh: () async =>

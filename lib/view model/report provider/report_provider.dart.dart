@@ -108,15 +108,15 @@ class ReportProvider extends ChangeNotifier {
       }
     });
 
-    final moodName = _moodHistoryList
-        .firstWhere((element) => element.moodNo == mostRepeatedMoodNo)
-        .feelingName;
+    // final moodName = _moodHistoryList
+    //     .firstWhere((element) => element.moodNo == mostRepeatedMoodNo)
+    //     .feelingName;
 
     final moodEmoji = _moodHistoryList
         .firstWhere((element) => element.moodNo == mostRepeatedMoodNo)
         .feelingEmoji;
 
-    return '$moodEmoji\n$moodName';
+    return moodEmoji;
   }
 
   int daysInMonth(int year, int month) {

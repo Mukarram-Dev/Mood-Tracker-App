@@ -123,21 +123,25 @@ Widget _buildListTitleWidget(HomeProvider value, BuildContext context) {
       children: [
         Text(
           'Feeling Now',
-          style: AppTextStyles.interSmall(
-            color: AppColors.blackLight,
+          style: AppTextStyles.interBody(
+            color: AppColors.hintText,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
           ),
         ),
         Gaps.horizontalGapOf(5),
         const Icon(
           Icons.circle,
-          size: 5,
+          size: 10,
           color: AppColors.primaryColor,
         ),
         Gaps.horizontalGapOf(5),
         Text(
           '${value.userModel?.feelingEmoji} ${value.userModel?.userFeeling}',
-          style: AppTextStyles.interSmall(
-            color: AppColors.blackLight,
+          style: AppTextStyles.interBody(
+            color: AppColors.textColor,
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],
