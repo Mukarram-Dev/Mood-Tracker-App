@@ -58,8 +58,8 @@ class HomeAppbarWidget extends StatelessWidget {
 
 Widget _shimmerName() {
   return Shimmer.fromColors(
-      baseColor: Colors.grey[300]!,
-      highlightColor: Colors.grey[100]!,
+      baseColor: Colors.white,
+      highlightColor: Colors.white,
       child: const Text('Hi Name,'));
 }
 
@@ -144,13 +144,13 @@ Widget _buildListTitleWidget(HomeProvider value, BuildContext context) {
         ),
         Gaps.horizontalGapOf(5),
         Text(
-          '${value.userModel?.feelingEmoji}',
+          '${!value.isUserLoading ? value.userModel?.feelingEmoji : '🕐'}',
           style: const TextStyle(
             fontSize: 20,
           ),
         ),
         Text(
-          '${value.userModel?.userFeeling}',
+          '${!value.isUserLoading ? value.userModel?.userFeeling : 'Waiting'}',
           style: AppTextStyles.interBody(
             color: AppColors.blackLight,
             fontSize: 14,

@@ -11,6 +11,7 @@ class HiveService {
   }
 
   Future<List<MoodEmoji>> getEmojiList() async {
+    await addInitialEmojiList();
     final listEmoji = boxMood.values.toList();
     return listEmoji.cast<MoodEmoji>();
   }

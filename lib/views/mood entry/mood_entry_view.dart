@@ -22,6 +22,12 @@ class _MoodEntryViewState extends State<MoodEntryView> {
   final TextEditingController _reasonController = TextEditingController();
 
   @override
+  void initState() {
+    context.read<HomeProvider>().setEmojiList();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     _reasonController.dispose();
     super.dispose();

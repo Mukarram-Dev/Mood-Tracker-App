@@ -11,18 +11,11 @@ class ActivityCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.appBarColor,
+        color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.4),
-            offset: const Offset(0, 3),
-            blurRadius: 5,
-            spreadRadius: 0.5,
-          ),
-        ],
+        border: Border.all(color: AppColors.primaryColor),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -30,12 +23,18 @@ class ActivityCard extends StatelessWidget {
         children: [
           Text(
             activity.name,
-            style: AppTextStyles.poppinsNormal(),
+            style: AppTextStyles.interBody(
+              fontWeight: FontWeight.w600,
+              color: AppColors.blackLight,
+            ),
           ),
           Flexible(
             child: Text(
               activity.description,
-              style: AppTextStyles.interBody(),
+              style: AppTextStyles.interSmall(
+                fontSize: 14,
+                color: AppColors.textColor,
+              ),
             ),
           ),
         ],

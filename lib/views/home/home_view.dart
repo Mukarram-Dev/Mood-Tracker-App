@@ -50,9 +50,12 @@ class _HomeViewState extends State<HomeView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const SizedBox(height: 20),
                     Text(
-                      'Recommendation For You',
-                      style: AppTextStyles.poppinsMedium(),
+                      'Recommended For You',
+                      style: AppTextStyles.poppinsMedium(
+                        color: AppColors.blackLight,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     _buildContainerSuggestion(context),

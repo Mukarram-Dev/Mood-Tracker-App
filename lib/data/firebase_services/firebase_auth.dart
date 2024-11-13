@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -52,7 +53,9 @@ class AuthService {
   void handleAuthError(
       FirebaseAuthException error, Function(String error) onError) {
     String errorMessage;
-    print("Error code: ${error.code}");
+    if (kDebugMode) {
+      print("Error code: ${error.code}");
+    }
     switch (error.code) {
       case "invalid-email":
         errorMessage = "Your email address appears to be malformed.";

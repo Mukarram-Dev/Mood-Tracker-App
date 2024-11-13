@@ -1,10 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:mood_track/data/db/hive.dart';
 import 'package:mood_track/data/firebase_services/firebase_database.dart';
 import 'package:mood_track/model/activity.dart';
 import 'package:mood_track/model/mood_emoji.dart';
 import 'package:mood_track/model/user_model.dart';
-import 'package:flutter/material.dart';
 import 'package:mood_track/utils/utils.dart';
 
 class HomeProvider with ChangeNotifier {
@@ -101,7 +101,9 @@ class HomeProvider with ChangeNotifier {
         notifyListeners();
       }
     } catch (error) {
-      print(error);
+      if (kDebugMode) {
+        print(error);
+      }
     } finally {
       _isUserLoading = false;
     }
@@ -117,7 +119,9 @@ class HomeProvider with ChangeNotifier {
       _isActivityLoading = false;
       notifyListeners();
     } catch (error) {
-      print('Error fetching activity data: $error');
+      if (kDebugMode) {
+        print('Error fetching activity data: $error');
+      }
       throw Exception(
           error); // Rethrow the error for higher-level error handling
     } finally {
