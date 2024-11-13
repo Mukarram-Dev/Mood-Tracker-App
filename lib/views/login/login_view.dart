@@ -20,19 +20,21 @@ class LoginView extends StatelessWidget {
     return ChangeNotifierProvider.value(
       value: LoginViewProvider(),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Gaps.verticalGapOf(30),
-                _header(context),
-                Gaps.verticalGapOf(50),
-                _inputField(context),
-                Gaps.verticalGapOf(20),
-                _signup(context),
-              ],
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              margin: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Gaps.verticalGapOf(30),
+                  _header(context),
+                  Gaps.verticalGapOf(50),
+                  _inputField(context),
+                  Gaps.verticalGapOf(20),
+                  _signup(context),
+                ],
+              ),
             ),
           ),
         ),

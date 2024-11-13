@@ -32,10 +32,6 @@ class HomeProvider with ChangeNotifier {
   bool _isUserLoading = true;
   bool get isUserLoading => _isUserLoading;
 
-  final feelingController = TextEditingController();
-  final feelingEmojiController = TextEditingController();
-  final reasonController = TextEditingController();
-
   final hiveService = HiveService();
   final _dbService = DataServices();
 
@@ -45,8 +41,8 @@ class HomeProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addUserCurrentMood() async {
-    if (reasonController.text.isEmpty) {
+  Future<void> addUserCurrentMood(String text) async {
+    if (text.isEmpty) {
       Utils.toastMessage('Reason Can\'t be empty');
       return;
     }
@@ -59,7 +55,7 @@ class HomeProvider with ChangeNotifier {
       'moodNo': _selectedIndex,
       'feelingName': _selectedMood,
       'feelingEmoji': _listEmoji[_selectedIndex].moodEmoji,
-      'reason': reasonController.text,
+      'reason': text,
       'date': DateFormat('dd MMM, yyyy - hh:mm a').format(DateTime.now()),
     };
     await _dbService.addUserCurrentFeeling(
@@ -129,25 +125,16 @@ class HomeProvider with ChangeNotifier {
     }
   }
 
-  Future<void> addEmoji() async {
-    await hiveService
-        .addEmoji(
-            'key_${feelingController.text.trim()}',
-            MoodEmoji(
-                moodEmoji: feelingEmojiController.text.trim(),
-                moodTitle: feelingController.text.trim()))
-        .then((value) => resetControllers());
+  Future<void> addEmoji(String feelingText, String feelingEmoji) async {
+    await hiveService.addEmoji(
+        'key_${feelingText.trim()}',
+        MoodEmoji(
+            moodEmoji: feelingEmoji.trim(), moodTitle: feelingText.trim()));
 
     await setEmojiList();
   }
 
-  void resetControllers() {
-    feelingController.clear();
-    feelingEmojiController.clear();
-  }
-
   void resetReasonController() {
-    reasonController.clear();
     _selectedMood = 'Happy';
     _selectedIndex = 0;
   }

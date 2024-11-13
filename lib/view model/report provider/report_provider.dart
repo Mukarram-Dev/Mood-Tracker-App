@@ -64,7 +64,7 @@ class ReportProvider extends ChangeNotifier {
     final today = DateTime.now();
     final startDate = DateTime(today.year, today.month, today.day, 0, 0, 0);
     final endDate = startDate.add(const Duration(days: 7));
-    _weeklyAverage = _calculateAverageMood(startDate, endDate);
+    _weeklyAverage = await _calculateAverageMood(startDate, endDate);
     notifyListeners();
   }
 
@@ -73,11 +73,12 @@ class ReportProvider extends ChangeNotifier {
     final startDate = DateTime(today.year, today.month, 1, 0, 0, 0);
     final daysOfMonth = daysInMonth(today.year, today.month);
     final endDate = startDate.add(Duration(days: daysOfMonth, hours: 23));
-    _monthlyAverage = _calculateAverageMood(startDate, endDate);
+    _monthlyAverage = await _calculateAverageMood(startDate, endDate);
     notifyListeners();
   }
 
-  String _calculateAverageMood(DateTime startDate, DateTime endDate) {
+  Future<String> _calculateAverageMood(
+      DateTime startDate, DateTime endDate) async {
     final filteredMoods = _moodHistoryList.where((mood) {
       final date = DateFormat('dd MMM, yyyy - hh:mm a').parse(mood.date, true);
       return date.isAfter(startDate) && date.isBefore(endDate) ||

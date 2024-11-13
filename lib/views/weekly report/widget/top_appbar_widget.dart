@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mood_track/configs/theme/colors.dart';
 import 'package:mood_track/configs/theme/text_theme_style.dart';
-import 'package:mood_track/utils/app_constants.dart';
 import 'package:mood_track/utils/gaps.dart';
-import 'package:mood_track/view%20model/report%20provider/report_provider.dart.dart';
+import 'package:mood_track/view%20model/report%20provider/report_provider.dart';
 import 'package:provider/provider.dart';
 
 class TopAppbarWidget extends StatelessWidget {
@@ -14,18 +13,11 @@ class TopAppbarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.7),
-        borderRadius: const BorderRadius.only(
+      decoration: const BoxDecoration(
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(40),
           bottomRight: Radius.circular(40),
-        ),
-        image: const DecorationImage(
-          opacity: 0.7,
-          fit: BoxFit.cover,
-          image: NetworkImage(
-            AppConstants.emojiBackground,
-          ),
         ),
       ),
       child: Stack(

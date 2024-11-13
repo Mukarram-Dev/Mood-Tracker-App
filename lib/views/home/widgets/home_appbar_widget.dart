@@ -17,33 +17,39 @@ class HomeAppbarWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(40)),
+        color: AppColors.primaryColor,
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(40),
+          bottomLeft: Radius.circular(40),
+        ),
       ),
-      child: Consumer<HomeProvider>(
-        builder: (context, value, child) => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.date_range_rounded,
-                  color: AppColors.primaryColor,
-                  size: 20,
-                ),
-                Gaps.horizontalGapOf(5),
-                Text(
-                  value.currentDay,
-                  style: AppTextStyles.interSmall(
+      child: SafeArea(
+        child: Consumer<HomeProvider>(
+          builder: (context, value, child) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const Icon(
+                    Icons.date_range_rounded,
                     color: AppColors.blackLight,
+                    size: 20,
                   ),
-                ),
-              ],
-            ),
-            Gaps.verticalGapOf(10),
-            _buildListTitleWidget(value, context),
-            Gaps.verticalGapOf(20),
-            _buildFeelingContainer(context),
-          ],
+                  Gaps.horizontalGapOf(5),
+                  Text(
+                    value.currentDay,
+                    style: AppTextStyles.interSmall(
+                      color: AppColors.blackLight,
+                    ),
+                  ),
+                ],
+              ),
+              Gaps.verticalGapOf(10),
+              _buildListTitleWidget(value, context),
+              Gaps.verticalGapOf(10),
+              _buildFeelingContainer(context),
+            ],
+          ),
         ),
       ),
     );
@@ -63,8 +69,8 @@ Widget _buildFeelingContainer(BuildContext context) {
     child: Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       decoration: BoxDecoration(
-        color: AppColors.primaryColor.withOpacity(0.9),
-        borderRadius: BorderRadius.circular(20),
+        color: AppColors.white.withOpacity(0.9),
+        borderRadius: BorderRadius.circular(30),
       ),
       child: Center(
         child: Row(
@@ -78,13 +84,13 @@ Widget _buildFeelingContainer(BuildContext context) {
                     vertical: 5,
                   ),
                   decoration: const BoxDecoration(
-                    color: AppColors.white,
+                    color: AppColors.primaryColor,
                     shape: BoxShape.circle,
                   ),
                   child: const Center(
                     child: Icon(
-                      Icons.emoji_emotions,
-                      color: AppColors.primaryColor,
+                      Icons.emoji_emotions_rounded,
+                      color: AppColors.black,
                     ),
                   ),
                 ),
@@ -117,14 +123,15 @@ Widget _buildListTitleWidget(HomeProvider value, BuildContext context) {
         ? _shimmerName()
         : Text(
             'Hi ${value.userModel?.name.split(' ').first}!',
-            style: AppTextStyles.poppinsMedium(),
+            style: AppTextStyles.poppinsMedium(color: AppColors.black),
           ),
     subtitle: Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           'Feeling Now',
           style: AppTextStyles.interBody(
-            color: AppColors.hintText,
+            color: AppColors.blackLight,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
@@ -133,13 +140,19 @@ Widget _buildListTitleWidget(HomeProvider value, BuildContext context) {
         const Icon(
           Icons.circle,
           size: 10,
-          color: AppColors.primaryColor,
+          color: AppColors.blackLight,
         ),
         Gaps.horizontalGapOf(5),
         Text(
-          '${value.userModel?.feelingEmoji} ${value.userModel?.userFeeling}',
+          '${value.userModel?.feelingEmoji}',
+          style: const TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        Text(
+          '${value.userModel?.userFeeling}',
           style: AppTextStyles.interBody(
-            color: AppColors.textColor,
+            color: AppColors.blackLight,
             fontSize: 14,
             fontWeight: FontWeight.w500,
           ),

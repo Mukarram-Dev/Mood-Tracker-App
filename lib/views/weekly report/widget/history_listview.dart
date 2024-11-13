@@ -67,10 +67,14 @@ class HistoryListview extends StatelessWidget {
             fontSize: 40,
           ),
         ),
-        subtitle: Text(
-          moodHistory.reason,
-          style: AppTextStyles.interSmall(
-            color: AppColors.blackLight,
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Text(
+            moodHistory.reason,
+            style: AppTextStyles.interBody(
+              color: AppColors.blackLight,
+              fontSize: 14,
+            ),
           ),
         ),
       ),
