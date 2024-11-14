@@ -164,8 +164,9 @@ class _MoodEntryViewState extends State<MoodEntryView> {
               .then((_) {
             Utils.toastMessage('Added Successfully');
             _reasonController.clear();
+            Navigator.pop(context);
             homeProvider.resetReasonController();
-          }).whenComplete(() => Navigator.pop(context));
+          });
         }
       },
       width: double.infinity,

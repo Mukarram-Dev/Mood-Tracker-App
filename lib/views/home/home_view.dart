@@ -36,7 +36,7 @@ class _HomeViewState extends State<HomeView> {
       appBar: PreferredSize(
         preferredSize: Size(
           double.infinity,
-          MediaQuery.of(context).size.height * 0.22,
+          MediaQuery.of(context).size.height * 0.23,
         ),
         child: const HomeAppbarWidget(),
       ),

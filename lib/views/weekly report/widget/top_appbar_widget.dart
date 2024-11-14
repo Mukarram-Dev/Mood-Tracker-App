@@ -32,6 +32,7 @@ class TopAppbarWidget extends StatelessWidget {
                     isMonthOrWeek.toLowerCase().contains('weekly')
                         ? value.weeklyAverage
                         : value.monthlyAverage;
+
                 return Column(
                   children: [
                     CircleAvatar(
@@ -42,13 +43,15 @@ class TopAppbarWidget extends StatelessWidget {
                         backgroundColor: AppColors.primaryColor,
                         child: CircleAvatar(
                           radius: 40,
-                          child: Text(
-                            moodAverage,
-                            style: AppTextStyles.poppinsNormal(
-                              color: AppColors.black,
-                              fontSize: 50,
-                            ),
-                          ),
+                          child: moodAverage.isEmpty
+                              ? const CircularProgressIndicator()
+                              : Text(
+                                  moodAverage,
+                                  style: AppTextStyles.poppinsNormal(
+                                    color: AppColors.black,
+                                    fontSize: 50,
+                                  ),
+                                ),
                         ),
                       ),
                     ),

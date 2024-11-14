@@ -20,7 +20,8 @@ class _WeeklyReportViewState extends State<WeeklyReportView> {
   }
 
   Future<void> _fetchWeeklyHistory() async {
-    await context.read()<ReportProvider>().getWeeklyMoodHistory(DateTime.now());
+    await Provider.of<ReportProvider>(context, listen: false)
+        .getWeeklyMoodHistory(DateTime.now());
   }
 
   @override

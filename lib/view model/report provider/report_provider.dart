@@ -25,13 +25,23 @@ class ReportProvider extends ChangeNotifier {
   String get monthlyAverage => _monthlyAverage;
 
   Future<void> getWeeklyMoodHistory(DateTime startDate) async {
-    final endDate = startDate.add(const Duration(days: 7));
-    final weeklyMoodHistory = _moodHistoryList.where((mood) {
-      final date = DateFormat('dd MMM, yyyy - hh:mm a').parse(mood.date, true);
-      return date.isAfter(startDate) && date.isBefore(endDate);
-    }).toList();
-    _weeklyMoodList = weeklyMoodHistory;
-    await calculateWeeklyAverage(); // Calculate weekly average mood
+    try {
+      _isWeeklyListLoading = true;
+      notifyListeners();
+
+      final endDate = startDate.add(const Duration(days: 7));
+      final weeklyMoodHistory = _moodHistoryList.where((mood) {
+        final date =
+            DateFormat('dd MMM, yyyy - hh:mm a').parse(mood.date, true);
+        return date.isAfter(startDate) && date.isBefore(endDate);
+      }).toList();
+      _weeklyMoodList = weeklyMoodHistory;
+
+      await calculateWeeklyAverage(); // Calculate weekly average mood
+    } finally {
+      _isWeeklyListLoading = false;
+      notifyListeners(); // Notify listeners with updated state and data
+    }
   }
 
   Future<void> getMonthlyMoodHistory(DateTime startDate) async {
